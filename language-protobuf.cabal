@@ -5,8 +5,8 @@ cabal-version:       >=1.10
 
 name:                language-protobuf
 version:             1.0
-synopsis:            Parser of protocol buffers files, according to <https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>.
--- description:
+synopsis:            Language definition and parser for Protocol Buffers.
+description:         Language definition and parser for Protocol Buffers files, according to <https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>.
 -- bug-reports:
 license:             Apache-2.0
 license-file:        LICENSE
