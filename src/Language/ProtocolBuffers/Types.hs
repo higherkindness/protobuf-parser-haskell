@@ -1,11 +1,15 @@
 {-# language GADTSyntax, PatternSynonyms #-}
-module Network.ProtoBuf.Types where
+-- | Elements in the Protocol Buffers syntax,
+--   as defined in <https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
+module Language.ProtocolBuffers.Types where
 
 import qualified Data.Text as T
 
 type Identifier = T.Text
 type FullIdentifier = [Identifier]
 
+-- | Whole definition, in which declarations are
+--   sorted out by their form.
 data ProtoBuf
   = ProtoBuf { syntax   :: Maybe T.Text
              , package  :: Maybe FullIdentifier
@@ -29,6 +33,8 @@ safeHead :: [a] -> Maybe a
 safeHead []    = Nothing
 safeHead (x:_) = Just x
 
+-- | Declarations, that is, anything which may
+--   appear in the top-level.
 data Declaration where
   DSyntax  :: T.Text               -> Declaration
   DImport  :: ImportType -> T.Text -> Declaration

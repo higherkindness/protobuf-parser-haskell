@@ -1,0 +1,4 @@
+resolver: nightly-2019-11-04
+allow-newer: true
+packages:
+- .

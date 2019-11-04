@@ -3,8 +3,8 @@ cabal-version:       >=1.10
 -- init'.  For further documentation, see
 -- http://haskell.org/cabal/users-guide/
 
-name:                protobuf-parser
-version:             0.1.0.0
+name:                language-protobuf
+version:             1.0
 synopsis:            Parser of protocol buffers files, according to <https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>.
 -- description:
 -- bug-reports:
@@ -17,8 +17,8 @@ category:            Network
 build-type:          Simple
 
 library
-  exposed-modules:     Network.ProtoBuf.Types,
-                       Network.ProtoBuf.Parser
+  exposed-modules:     Language.ProtocolBuffers.Types,
+                       Language.ProtocolBuffers.Parser
   -- other-modules:
   -- other-extensions:
   build-depends:       base >=4.12 && <5, megaparsec, text

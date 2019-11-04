@@ -1,7 +1,11 @@
 {-# language FlexibleContexts, OverloadedStrings #-}
-module Network.ProtoBuf.Parser (
+-- | Parser for the proto3 spec,
+--   as defined in <https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>.
+module Language.ProtocolBuffers.Parser (
+  -- * Parse and sort out a whole file
   parseProtoBufFile
 , parseProtoBuf
+  -- * Parse declarations
 , parseProtoBufDeclarations
 ) where
 
@@ -11,12 +15,17 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 
-import Network.ProtoBuf.Types
+import Language.ProtocolBuffers.Types
 
+-- | Parse a whole file into a 'ProtoBuf' structure.
+--   This function sorts together the different declarations.
 parseProtoBufFile :: FilePath -> IO (Either (ParseErrorBundle T.Text Char) ProtoBuf)
 parseProtoBufFile p = parseProtoBuf <$> T.readFile p
+-- | Parse 'T.Text' into a 'ProtoBuf' structure.
+--   This function sorts together the different declarations.
 parseProtoBuf :: T.Text -> Either (ParseErrorBundle T.Text Char) ProtoBuf
 parseProtoBuf = parse wholeProtoBuf ""
+-- | Parse all the declarations in a 'T.Text'.
 parseProtoBufDeclarations :: T.Text -> Either (ParseErrorBundle T.Text Char) [Declaration]
 parseProtoBufDeclarations = parse (many declaration) ""
 
