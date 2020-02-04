@@ -72,11 +72,12 @@ data ImportType
   deriving (Eq, Show)
 
 data Constant where
-  KIdentifier :: FullIdentifier -> Constant
-  KInt        :: Integer        -> Constant
-  KFloat      :: Float          -> Constant
-  KString     :: T.Text         -> Constant
-  KBool       :: Bool           -> Constant
+  KIdentifier :: FullIdentifier       -> Constant
+  KInt        :: Integer              -> Constant
+  KFloat      :: Float                -> Constant
+  KString     :: T.Text               -> Constant
+  KBool       :: Bool                 -> Constant
+  KObject     :: [(T.Text, Constant)] -> Constant
   deriving (Eq, Show)
 
 data EnumField where

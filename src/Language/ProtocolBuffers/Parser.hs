@@ -68,10 +68,15 @@ constant :: MonadParsec Char T.Text m => m Constant
 constant 
   =   KFloat  <$> floating
   <|> KInt    <$> number
-  <|> KString <$> stringLiteral
+  <|> KString . T.concat <$> ((:) <$> stringLiteral' <*> many stringLiteral')
   <|> KBool True  <$ reserved "true"
   <|> KBool False <$ reserved "false"
+  <|> KObject     <$> betweenBraces (many objectField)
   <|> KIdentifier <$> fullIdentifier
+  where stringLiteral' = stringLiteral <* optional spaceConsumer
+        objectField = (,) <$> identifier
+                          <*> (   symbol ":" *> constant
+                              <|> KObject <$> betweenBraces (many objectField) )
 
 optionName :: MonadParsec Char T.Text m => m FullIdentifier
 optionName = (++) <$> ((: []) <$> identifier <|> betweenParens fullIdentifier)
@@ -91,18 +96,20 @@ innerOption
            <*> constant
 
 wholeProtoBuf :: MonadParsec Char T.Text m => m ProtoBuf
-wholeProtoBuf = declsToProtoBuf <$> many declaration
+wholeProtoBuf = declsToProtoBuf <$ spaceConsumer <*> many declaration
 
 declaration :: MonadParsec Char T.Text m => m Declaration
-declaration
-  =   DSyntax  <$ reserved "syntax" <* symbol "=" <*> stringLiteral <* symbol ";"
-  <|> DImport  <$ reserved "import"
-               <*> (Weak <$ reserved "weak" <|> Public <$ reserved "public" <|> pure Normal)
-               <*> stringLiteral <* symbol ";"
-  <|> DPackage <$ reserved "package" <*> fullIdentifier <* symbol ";"
-  <|> DOption  <$> topOption
-  <|> DType    <$> typeDeclaration
-  <|> DService <$> serviceDeclaration
+declaration = spaceConsumer *> declaration'
+  where 
+    declaration'
+      =   DSyntax  <$ reserved "syntax" <* symbol "=" <*> stringLiteral <* symbol ";"
+      <|> DImport  <$ reserved "import"
+                   <*> (Weak <$ reserved "weak" <|> Public <$ reserved "public" <|> pure Normal)
+                   <*> stringLiteral <* symbol ";"
+      <|> DPackage <$ reserved "package" <*> fullIdentifier <* symbol ";"
+      <|> DOption  <$> topOption
+      <|> DType    <$> typeDeclaration
+      <|> DService <$> serviceDeclaration
 
 typeDeclaration :: MonadParsec Char T.Text m => m TypeDeclaration
 typeDeclaration
